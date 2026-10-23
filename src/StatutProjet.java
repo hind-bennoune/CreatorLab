@@ -1,0 +1,1 @@
+public enum StatutProjet { BROUILLON, PLANIFIE, EN_PRODUCTION, LIVRE }
