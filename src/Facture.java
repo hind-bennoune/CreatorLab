@@ -1,29 +1,29 @@
-import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Facture {
-    private final int numero;
-    private final LocalDate dateEmission;
-    private final Reservation reservation;
-    private final List<LigneFacture> lignes;
+    private int numero;
+    private LocalDate dateEmission = LocalDate.now();
+    private List<LigneFacture> lignes = new ArrayList<>();
 
-    public Facture(int numero, Reservation reservation, List<LigneFacture> lignes) {
-        if (numero <= 0 || reservation == null || lignes == null || lignes.isEmpty()) {
-            throw new IllegalArgumentException("Facture invalide");
-        }
+    public Facture(int numero) {
         this.numero = numero;
-        this.reservation = reservation;
-        this.lignes = List.copyOf(lignes);
-        this.dateEmission = LocalDate.now();
     }
 
-    public BigDecimal calculerTotal() {
-        return lignes.stream().map(LigneFacture::sousTotal)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    public void ajouterLigne(LigneFacture ligne) {
+        lignes.add(ligne);
     }
+
+    public double calculerTotal() {
+        double total = 0;
+        for (LigneFacture ligne : lignes) {
+            total += ligne.sousTotal();
+        }
+        return total;
+    }
+
     public int getNumero() { return numero; }
     public LocalDate getDateEmission() { return dateEmission; }
-    public Reservation getReservation() { return reservation; }
     public List<LigneFacture> getLignes() { return lignes; }
 }

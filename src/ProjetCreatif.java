@@ -1,26 +1,28 @@
 import java.util.Set;
 
+// Classe abstraite : on ne cree jamais un "projet" generique,
+// toujours un Podcast, une Video ou un ShootingPhoto.
 public abstract class ProjetCreatif {
-    private final int id;
-    private final Client client;
-    private final String titre;
+    private int id;
+    private Client client;
+    private String titre;
     private StatutProjet statut = StatutProjet.BROUILLON;
 
-    protected ProjetCreatif(int id, Client client, String titre) {
-        if (id <= 0 || client == null || titre == null || titre.isBlank()) {
-            throw new IllegalArgumentException("Projet invalide");
-        }
+    public ProjetCreatif(int id, Client client, String titre) {
         this.id = id;
         this.client = client;
         this.titre = titre;
     }
 
+    // Methodes que chaque type de projet doit definir
     public abstract TypeProduction getType();
     public abstract int getNombreParticipants();
     public abstract Set<TypeEquipement> getMaterielRequis();
 
     public void planifier() {
-        if (statut == StatutProjet.BROUILLON) statut = StatutProjet.PLANIFIE;
+        if (statut == StatutProjet.BROUILLON) {
+            statut = StatutProjet.PLANIFIE;
+        }
     }
 
     public int getId() { return id; }
