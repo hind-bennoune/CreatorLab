@@ -1,6 +1,12 @@
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class Main {
     public static void main(String[] args) {
@@ -36,7 +42,33 @@ public class Main {
             System.out.println("Reservations de Youssef : " + gestion.reservationsDuClient(1).size());
             System.out.println("Chiffre d'affaires : " + gestion.chiffreAffaires() + " DH");
 
-            // 3. Cas d'erreur : un autre client veut le meme studio au meme moment
+            // 3. Phase 4 : interfaces fonctionnelles du cours (Predicate + Consumer)
+            Predicate<Reservation> active = res -> res.estActive();
+            Consumer<Reservation> afficher = res ->
+                    System.out.println("Reservation " + res.getId() + " : " + res.getProjet().getTitre());
+            System.out.println("Reservations actives :");
+            gestion.getReservations().stream().filter(active).forEach(afficher);
+
+            // 3 bis. Autres interfaces fonctionnelles du cours
+            // Function : 1 entree -> 1 resultat
+            Function<Reservation, String> resume = res ->
+                    res.getProjet().getTitre() + " (" + res.getStudio().getLibelle() + ")";
+            gestion.getReservations().stream().map(resume).forEach(System.out::println);
+
+            // Supplier : aucune entree -> fournit une valeur
+            Supplier<LocalDateTime> debutParDefaut = () -> LocalDateTime.of(2026, 11, 10, 14, 0);
+            System.out.println("Debut par defaut : " + debutParDefaut.get());
+
+            // BiFunction : 2 entrees -> 1 resultat
+            BiFunction<Studio, Double, Double> prixStudio = (s, h) -> s.calculerPrix(h);
+            System.out.println("Studio B pendant 3h : " + prixStudio.apply(studioB, 3.0) + " DH");
+
+            // BiConsumer : 2 entrees -> une action, sans resultat
+            BiConsumer<String, Double> afficherLigne = (nom, prix) ->
+                    System.out.println(" - " + nom + " : " + prix + " DH");
+            afficherLigne.accept("Camera", camera.calculerPrix(2));
+
+            // 4. Cas d'erreur : un autre client veut le meme studio au meme moment
             Client sara = new Client(2, "Sara", "sara@example.com");
             ProjetCreatif autreProjet = new Video(2, sara, "Pub locale", 2);
             gestion.reserver(autreProjet, studioB, List.of(camera), debut, fin);
