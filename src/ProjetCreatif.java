@@ -2,6 +2,7 @@ import java.util.Set;
 
 // Classe abstraite : on ne cree jamais un "projet" generique,
 // toujours un Podcast, une Video ou un ShootingPhoto.
+
 public abstract class ProjetCreatif {
     private int id;
     private Client client;
@@ -15,6 +16,7 @@ public abstract class ProjetCreatif {
     }
 
     // Methodes que chaque type de projet doit definir
+    
     public abstract TypeProduction getType();
     public abstract int getNombreParticipants();
     public abstract Set<TypeEquipement> getMaterielRequis();
