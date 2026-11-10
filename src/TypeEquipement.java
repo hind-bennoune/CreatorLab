@@ -1,1 +1,0 @@
-public enum TypeEquipement { MICROPHONE, CAMERA, APPAREIL_PHOTO, ECLAIRAGE }
